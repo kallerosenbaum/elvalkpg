@@ -15,9 +15,9 @@ import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 
 public class TwitterDataSource {
-	public void hej(final Cache<Object, Object> cache, String hashTag) {
+	public void hej(final Cache<Object, Object> tweetCache, Cache<Object, Object> indexCache, String hashTag) {
 		
-		LuceneStuff luceneIndexer = new LuceneStuff(cache);
+		LuceneStuff luceneIndexer = new LuceneStuff(indexCache);
 		
 	    Twitter twitter = new TwitterFactory().getInstance();
 	    
@@ -32,7 +32,7 @@ public class TwitterDataSource {
 			System.out.println("HitCount : " + hitCount + ", Total : " + tweetCount) ;
 			for (Tweet tweet : result.getTweets()) {
 				System.out.println(tweet.getId() + " : " + tweet.getText());
-				cache.put(tweet.getId(), tweet);
+				tweetCache.put(tweet.getId(), tweet);
 				try {
 					luceneIndexer.addNewDocument(tweet);
 				} catch (IOException e) {
@@ -59,7 +59,7 @@ public class TwitterDataSource {
 
 	public static void main( String[] args) {
 		TwitterDataSource dataSource = new TwitterDataSource();
-		dataSource.hej(CacheCreator.getCache(), args[0]);
+		dataSource.hej(CacheCreator.getTweetCache(), CacheCreator.getIndexCache(), args[0]);
 	}
 	
 	private void sleep() {

@@ -7,7 +7,7 @@ public class InfinispanTest {
 	
 	
 	public static void main(String[] args) {
-		Cache<Object, Object> c = CacheCreator.getCache();
+		Cache<Object, Object> c = CacheCreator.getTweetCache();
 
 //		c.addListener(new CacheListener());
 //		int size = Integer.parseInt(args[0]);
