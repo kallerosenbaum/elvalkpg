@@ -20,7 +20,7 @@ public class SearchClient {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Cache<Object, Object> cache = CacheCreator.getCache();
+		Cache<Object, Object> cache = CacheCreator.getIndexCache();
 		LuceneStuff lucene = new LuceneStuff(cache);
 		SearchClient client = new SearchClient(lucene);
 		client.run();

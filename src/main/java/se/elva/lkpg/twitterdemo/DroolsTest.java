@@ -44,7 +44,7 @@ public class DroolsTest {
 			KnowledgeRuntimeLogger logger = KnowledgeRuntimeLoggerFactory
 					.newFileLogger(ksession, "test");
 			MyHornetQServer.run();
-			Cache<Object, Object> cache = CacheCreator.getCache();
+			Cache<Object, Object> cache = CacheCreator.getTweetCache();
 			TwitterListener twitterListener = new TwitterListener(ksession);
 			cache.addListener(twitterListener);
 			logger.close();
