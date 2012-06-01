@@ -111,6 +111,9 @@ public class LuceneStuff {
 	 */
 	public List<Address> listAllMembers() {
 		EmbeddedCacheManager cacheManager = cache.getCacheManager();
+		for (String name : cacheManager.getCacheNames()) {
+			System.out.println("Cache name " + name);
+		}
 		return cacheManager.getMembers();
 	}
 }
