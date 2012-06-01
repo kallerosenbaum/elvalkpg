@@ -1,5 +1,10 @@
 package se.elva.lkpg.twitterdemo;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
 import org.infinispan.Cache;
 import org.infinispan.configuration.cache.CacheMode;
 import org.infinispan.configuration.cache.ConfigurationBuilder;
@@ -20,12 +25,28 @@ public class CacheCreator {
 	}
 	
 	private static void configureCache(String cacheName) {
+		configureJgroupsBindAddress();
 		ConfigurationBuilder configBuilder = new ConfigurationBuilder();
 		configBuilder.clustering().cacheMode(CacheMode.DIST_SYNC).hash().numOwners(2).groups();
 	    configBuilder.invocationBatching().enable();	
 		manager.defineConfiguration(cacheName, configBuilder.build());
 	}
 	
+	private static void configureJgroupsBindAddress() {
+		String myIpAddress = "127.0.0.1";
+		Socket socket;
+		try {
+			socket = new Socket(InetAddress.getByName("google.se"), 80);
+			myIpAddress = socket.getLocalAddress().getHostAddress();
+			socket.close();
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.setProperty("jgroups.bind_addr", myIpAddress);
+	}
+
 	private static void configureTweetCache() {
 		configureCache("tweet-cache");
 	}
