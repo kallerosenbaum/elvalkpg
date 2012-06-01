@@ -8,12 +8,16 @@ import org.apache.lucene.search.Query;
 import org.infinispan.Cache;
 import org.infinispan.remoting.transport.Address;
 
+import twitter4j.Tweet;
+
 public class SearchClient {
 
 	LuceneStuff lucene;
+	Cache<Long, Tweet> tweetCache;
 
-	private SearchClient(LuceneStuff luceneStuff) {
+	private SearchClient(LuceneStuff luceneStuff, Cache<Long, Tweet> tweetCache) {
 		this.lucene = luceneStuff;
+		this.tweetCache = tweetCache;
 	}
 
 	/**
@@ -22,20 +26,21 @@ public class SearchClient {
 	public static void main(String[] args) {
 		Cache<Object, Object> cache = CacheCreator.getIndexCache();
 		LuceneStuff lucene = new LuceneStuff(cache);
-		SearchClient client = new SearchClient(lucene);
+		SearchClient client = new SearchClient(lucene,
+				CacheCreator.getTweetCache());
 		client.run();
 	}
 
-	private void printResult(List<String> storedValues) {
-		System.out.println("Matching tweets:\n");
-		if (storedValues.isEmpty()) {
-			System.out.println("\tNo documents found.");
-		} else {
-			int i = 0;
-			for (String value : storedValues) {
-				System.out.println(++i + "\t\"" + value + "\"");
+	private void printResult(List<Long> storedValues) {
+		System.out.println(storedValues.size() + " matching tweets found:\n");
+		int i = 0;
+		for (Long id : storedValues) {
+			Tweet tweet = tweetCache.get(id);
+			if (tweet != null) {
+				System.out.println(tweet);
 			}
 		}
+
 	}
 
 	private void doQuery(Scanner scanner) {
@@ -51,13 +56,13 @@ public class SearchClient {
 				System.out.println("type it again: ");
 			}
 		}
-		List<String> listMatches = lucene.listStoredValuesMatchingQuery(query);
+		List<Long> listMatches = lucene.listStoredValuesMatchingQuery(query, 100);
 		printResult(listMatches);
 	}
 
-	private void listAllDocuments() {
-		List<String> listMatches = lucene.listAllDocuments();
-		printResult(listMatches);
+	private void countAllDocuments() {
+		List<Long> listMatches = lucene.listAllDocuments();
+		System.out.println("Number of tweets: " + listMatches.size());
 	}
 
 	private void listMembers() {
@@ -66,11 +71,9 @@ public class SearchClient {
 	}
 
 	private void showOptions() {
-		System.out.println("Options:\n" 
-				+ "\t[1] List cluster members\n"
-				+ "\t[2] List all documents in index\n"
-				+ "\t[4] enter a query\n"
-				+ "\t[5] quit");
+		System.out.println("Options:\n" + "\t[1] List cluster members\n"
+				+ "\t[2] Count all documents in index\n"
+				+ "\t[4] enter a query\n" + "\t[5] quit");
 	}
 
 	private void run() {
@@ -92,7 +95,7 @@ public class SearchClient {
 					listMembers();
 					break;
 				case 2:
-					listAllDocuments();
+					countAllDocuments();
 					break;
 				case 4:
 					doQuery(scanner);

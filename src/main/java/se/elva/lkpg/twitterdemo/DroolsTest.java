@@ -29,6 +29,7 @@ public class DroolsTest {
 	
 			StatefulKnowledgeSession ksession = kbase
 					.newStatefulKnowledgeSession();
+			ksession.setGlobal("tweetProcessor", new TweetPrinter());
 			KnowledgeRuntimeLogger logger = KnowledgeRuntimeLoggerFactory
 					.newFileLogger(ksession, "test");
 			Cache<Long, Tweet> cache = CacheCreator.getTweetCache();

@@ -38,6 +38,8 @@ public class LuceneStuff {
 	private static final Analyzer analyzer = new StandardAnalyzer(
 			Version.LUCENE_33);
 	private static final String TEXT = "text";
+	private static final String ID = "id";
+
 	private static final Version VERSION = Version.LUCENE_33;
  
 	{
@@ -54,8 +56,8 @@ public class LuceneStuff {
 		IndexWriter iw = new IndexWriter(directory, writerConfig);
 		try {
 			Document doc = new Document();
-			Field field = new Field(TEXT, tweet.getText(), Store.YES, Index.ANALYZED);
-			doc.add(field);
+			doc.add(new Field(ID, Long.toString(tweet.getId()), Store.YES, Index.ANALYZED));
+			doc.add(new Field(TEXT, tweet.getText(), Store.NO, Index.ANALYZED));
 			iw.addDocument(doc);
 			iw.commit();
 		} finally {
@@ -68,17 +70,17 @@ public class LuceneStuff {
 	 * 
 	 * @throws IOException
 	 */
-	public List<String> listStoredValuesMatchingQuery(Query query) {
+	public List<Long> listStoredValuesMatchingQuery(Query query, int limit) {
 		try {
 			IndexReader indexReader = IndexReader.open(directory);
 			
 			IndexSearcher searcher = new IndexSearcher(indexReader);
 			TopDocs topDocs = searcher.search(query, null, 100);
 			ScoreDoc[] scoreDocs = topDocs.scoreDocs;
-			List<String> list = new ArrayList<String>();
+			List<Long> list = new ArrayList<Long>();
 			for (ScoreDoc sd : scoreDocs) {
 				Document doc = searcher.doc(sd.doc);
-				list.add(doc.get(TEXT));
+				list.add(Long.parseLong(doc.get(ID)));
 			}
 			return list;
 		} catch (IOException ioe) {
@@ -101,9 +103,9 @@ public class LuceneStuff {
 	 * 
 	 * @throws IOException
 	 */
-	public List<String> listAllDocuments() {
+	public List<Long> listAllDocuments() {
 		MatchAllDocsQuery q = new MatchAllDocsQuery();
-		return listStoredValuesMatchingQuery(q);
+		return listStoredValuesMatchingQuery(q, 1000000);
 	}
 
 	/**
