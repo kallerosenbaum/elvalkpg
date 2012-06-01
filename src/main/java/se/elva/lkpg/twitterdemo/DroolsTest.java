@@ -26,9 +26,10 @@ public class DroolsTest {
 		try {
 			// load up the knowledge base
 			KnowledgeBase kbase = readKnowledgeBase();
-	
+			MyHornetQServer.run();
 			StatefulKnowledgeSession ksession = kbase
 					.newStatefulKnowledgeSession();
+			//ksession.setGlobal("tweetProcessor", new TweetQueueAdder());
 			ksession.setGlobal("tweetProcessor", new TweetPrinter());
 			KnowledgeRuntimeLogger logger = KnowledgeRuntimeLoggerFactory
 					.newFileLogger(ksession, "test");

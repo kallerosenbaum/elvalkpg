@@ -30,12 +30,12 @@ public class TwitterDataSource {
 			for (Tweet tweet : result.getTweets()) {
 				System.out.println(tweet.getId() + " : " + tweet.getText());
 				tweetCache.put(tweet.getId(), tweet);
-				try {
-					luceneIndexer.addNewDocument(tweet);
-				} catch (IOException e) {
-					System.out.println("Failed to index tweet " + tweet);
-					e.printStackTrace();
-				}
+//				try {
+//					luceneIndexer.addNewDocument(tweet);
+//				} catch (IOException e) {
+//					System.out.println("Failed to index tweet " + tweet);
+//					e.printStackTrace();
+//				}
 				maxId = Math.max(maxId, tweet.getId());				
 			}
 			query.setSinceId(maxId);
