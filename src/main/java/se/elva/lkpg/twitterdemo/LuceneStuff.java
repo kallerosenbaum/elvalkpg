@@ -75,7 +75,7 @@ public class LuceneStuff {
 			IndexReader indexReader = IndexReader.open(directory);
 			
 			IndexSearcher searcher = new IndexSearcher(indexReader);
-			TopDocs topDocs = searcher.search(query, null, 100);
+			TopDocs topDocs = searcher.search(query, null, limit);
 			ScoreDoc[] scoreDocs = topDocs.scoreDocs;
 			List<Long> list = new ArrayList<Long>();
 			for (ScoreDoc sd : scoreDocs) {
