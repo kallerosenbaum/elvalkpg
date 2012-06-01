@@ -5,4 +5,4 @@ if [ "$#" != "1" ] ; then
   exit 1
 fi
 
-java -cp target/classes:target/dependency/* se.elva.lkpg.twitterdemo.TwitterDataSource $@
+mvn exec:java -Dexec.mainClass="se.elva.lkpg.twitterdemo.TwitterDataSource" -Dexec.args="$@"
