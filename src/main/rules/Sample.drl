@@ -1,0 +1,29 @@
+#created on: May 31, 2012
+package se.elva.sample
+
+#list any import classes here.
+import twitter4j.Tweet;
+
+
+#declare any global variables here
+dialect "mvel"
+declare Tweet
+	@Role(event)
+end
+
+rule "Sent from lonneberg "
+	
+	when
+		$t : Tweet(fromUser == "lonneberg") from entry-point "Twitter Stream"
+		#conditions
+	then 
+		#actions
+		System.out.println("Message sent from lonneberg");
+end
+
+rule "Sent from rosenbaum"
+	when
+		$t : Tweet(fromUser == "rosenbaum") from entry-point "Twitter Stream"
+	then
+		System.out.println("Message sent from elvis lover");
+end
