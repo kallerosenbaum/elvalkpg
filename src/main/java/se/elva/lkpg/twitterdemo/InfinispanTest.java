@@ -2,22 +2,13 @@ package se.elva.lkpg.twitterdemo;
 
 import org.infinispan.Cache;
 
+import twitter4j.Tweet;
+
 public class InfinispanTest {
 	
-	
-	
 	public static void main(String[] args) {
-		Cache<Object, Object> c = CacheCreator.getTweetCache();
+		Cache<Long, Tweet> c = CacheCreator.getTweetCache();
 
-//		c.addListener(new CacheListener());
-//		int size = Integer.parseInt(args[0]);
-//		int start = size * 100;
-	//	p("Cache contains " + c.size() + " elements");
-		
-/*		p("Adding elements [" + start + "," + (start+99) + "]");
-		for (int i = start; i < start + 100; i++) {
-			c.put(i, "" + i);
-		}*/
 		while (true) {
 			p("Cache contains " + c.size() + " elements");
 			try {
