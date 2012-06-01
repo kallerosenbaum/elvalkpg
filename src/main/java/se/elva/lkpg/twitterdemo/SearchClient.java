@@ -32,28 +32,33 @@ public class SearchClient {
 	}
 
 	private void printResult(List<Long> storedValues) {
-		System.out.println(storedValues.size() + " matching tweets found:\n");
+		Printer.p(storedValues.size() + " matching tweets found:\n");
 		int i = 0;
+		TweetPrinter printer = new TweetPrinter();
 		for (Long id : storedValues) {
 			Tweet tweet = tweetCache.get(id);
 			if (tweet != null) {
-				System.out.println(tweet);
+				printer.processTweet(tweet);
 			}
 		}
-
+	}
+	
+	private void printTweet(Tweet tweet) {
+		String result = tweet.getId() + " :\n" + tweet.getText() + "\n - " + tweet.getFromUser();
+		Printer.p(result);
 	}
 
 	private void doQuery(Scanner scanner) {
 		scanner.nextLine();
 		Query query = null;
 		while (query == null) {
-			System.out.println("Enter a query:");
+			Printer.p("Enter a query:");
 			String queryLine = scanner.nextLine();
 			try {
 				query = lucene.parseQuery(queryLine);
 			} catch (ParseException e) {
-				System.out.println("Wrong syntax in query: " + e.getMessage());
-				System.out.println("type it again: ");
+				Printer.p("Wrong syntax in query: " + e.getMessage());
+				Printer.p("type it again: ");
 			}
 		}
 		List<Long> listMatches = lucene.listStoredValuesMatchingQuery(query, 100);
@@ -62,16 +67,16 @@ public class SearchClient {
 
 	private void countAllDocuments() {
 		List<Long> listMatches = lucene.listAllDocuments();
-		System.out.println("Number of tweets: " + listMatches.size());
+		Printer.p("Number of tweets: " + listMatches.size());
 	}
 
 	private void listMembers() {
 		List<Address> members = lucene.listAllMembers();
-		System.out.println("\tmembers:\t" + members);
+		Printer.p("\tmembers:\t" + members);
 	}
 
 	private void showOptions() {
-		System.out.println("Options:\n" + "\t[1] List cluster members\n"
+		Printer.p("Options:\n" + "\t[1] List cluster members\n"
 				+ "\t[2] Count all documents in index\n"
 				+ "\t[4] enter a query\n" + "\t[5] quit");
 	}
@@ -83,7 +88,7 @@ public class SearchClient {
 			boolean warned = false;
 			while (!scanner.hasNextInt()) {
 				if (!warned) {
-					System.out.println("Invalid option, try again:");
+					Printer.p("Invalid option, try again:");
 					warned = true;
 				}
 				scanner.nextLine();
@@ -101,12 +106,12 @@ public class SearchClient {
 					doQuery(scanner);
 					break;
 				case 5:
-					System.out.println("Quit.");
+					Printer.p("Quit.");
 					return;
 				default:
-					System.out.println("Invalid option.");
+					Printer.p("Invalid option.");
 				}
-				System.out.println("");
+				Printer.p("");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

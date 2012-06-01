@@ -7,14 +7,14 @@ import twitter4j.UserMentionEntity;
 public class TweetPrinter implements TweetProcessor {
 
 	public void processTweet(Tweet tweet) {
-		System.out.println("Id: " + tweet.getId());
-		System.out.println("Text:"  + tweet.getText());
-		System.out.println("To User: " + tweet.getToUser());
+		Printer.p("Id: " + tweet.getId());
+		Printer.p("Text:"  + tweet.getText());
+		Printer.p("To User: " + tweet.getToUser());
 		for (HashtagEntity hashTag : tweet.getHashtagEntities()) {
-			System.out.println("Hashtag: " + hashTag.getText());
+			Printer.p("Hashtag: " + hashTag.getText());
 		}
 		for (UserMentionEntity userMentioned : tweet.getUserMentionEntities()) {
-			System.out.println("User mentioned: " + userMentioned.getScreenName());
+			Printer.p("User mentioned: " + userMentioned.getScreenName());
 		}
 		
 	}

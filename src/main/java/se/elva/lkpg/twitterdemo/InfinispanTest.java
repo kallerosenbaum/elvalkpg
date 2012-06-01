@@ -10,15 +10,11 @@ public class InfinispanTest {
 		Cache<Long, Tweet> c = CacheCreator.getTweetCache();
 
 		while (true) {
-			p("Cache contains " + c.size() + " elements");
+			Printer.p("Cache contains " + c.size() + " elements");
 			try {
 				Thread.sleep(3000L);
 			} catch (InterruptedException e) {
 			}
 		}
-	}
-
-	private static void p(String string) {
-		System.out.println(string);
 	}
 }
