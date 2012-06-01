@@ -14,11 +14,11 @@ end
 rule "Sent from lonneberg "
 	
 	when
-		$t : Tweet(fromUser == "lonneberg") from entry-point "Twitter Stream"
+		$t : Tweet(toUser == "justinbieber") from entry-point "Twitter Stream"
 		#conditions
 	then 
 		#actions
-		System.out.println("Message sent from lonneberg");
+		System.out.println("Message sent to Justin Bieber");
 end
 
 rule "Sent from rosenbaum"

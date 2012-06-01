@@ -1,6 +1,5 @@
 package se.elva.lkpg.twitterdemo;
 
-
 import org.drools.runtime.StatefulKnowledgeSession;
 import org.drools.runtime.rule.WorkingMemoryEntryPoint;
 import org.infinispan.notifications.Listener;
@@ -21,10 +20,14 @@ public class TwitterListener {
 
 	@CacheEntryModified
 	public void entryModified(CacheEntryModifiedEvent<Object, Object> event) {
-		if ( !event.isPre()) {
-			Tweet tweet = (Tweet) event.getValue();
-			WorkingMemoryEntryPoint wm = ksession.getWorkingMemoryEntryPoint("Twitter Stream");
-			wm.insert(tweet);
+		if (!event.isPre()) {
+			if (event.getValue() instanceof Tweet) {
+				Tweet tweet = (Tweet) event.getValue();
+				System.out.println(tweet.getToUser());
+				WorkingMemoryEntryPoint wm = ksession.getWorkingMemoryEntryPoint("Twitter Stream");
+				wm.insert(tweet);
+				ksession.fireAllRules();
+			}
 		}
 	}
 
