@@ -23,7 +23,7 @@ public class TwitterListener {
 		if (!event.isPre()) {
 			if (event.getValue() instanceof Tweet) {
 				Tweet tweet = (Tweet) event.getValue();
-				System.out.println(tweet.getToUser());
+				System.out.println(tweet.getId() + " : " + tweet.getToUser());
 				WorkingMemoryEntryPoint wm = ksession.getWorkingMemoryEntryPoint("Twitter Stream");
 				wm.insert(tweet);
 				ksession.fireAllRules();

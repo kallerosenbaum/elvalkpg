@@ -3,27 +3,29 @@ package se.elva.sample
 
 #list any import classes here.
 import twitter4j.Tweet;
+import se.elva.lkpg.twitterdemo.TweetProcessor;
 
 
 #declare any global variables here
 dialect "mvel"
+
+global TweetProcessor tweetProcessor;
 declare Tweet
 	@Role(event)
 end
+
 
 rule "Sent from lonneberg "
 	
 	when
 		$t : Tweet(toUser == "justinbieber") from entry-point "Twitter Stream"
-		#conditions
 	then 
-		#actions
-		System.out.println("Message sent to Justin Bieber");
+		tweetProcessor.processTweet($t);
 end
 
 rule "Sent from rosenbaum"
 	when
 		$t : Tweet(fromUser == "rosenbaum") from entry-point "Twitter Stream"
 	then
-		System.out.println("Message sent from elvis lover");
+		tweetProcessor.processTweet($t);
 end
