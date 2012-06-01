@@ -26,14 +26,14 @@ public class TwitterDataSource {
 			QueryResult result = getSearchResult(twitter, query);
 			int hitCount = result.getTweets().size();
 			tweetCount += hitCount;
-			System.out.println("HitCount : " + hitCount + ", Total : " + tweetCount) ;
+			Printer.p("HitCount : " + hitCount + ", Total : " + tweetCount) ;
 			for (Tweet tweet : result.getTweets()) {
-				System.out.println(tweet.getId() + " : " + tweet.getText());
+				Printer.p(tweet.getId() + " : " + tweet.getText());
 				tweetCache.put(tweet.getId(), tweet);
 				try {
 					luceneIndexer.addNewDocument(tweet);
 				} catch (IOException e) {
-					System.out.println("Failed to index tweet " + tweet);
+					Printer.p("Failed to index tweet " + tweet);
 					e.printStackTrace();
 				}
 				maxId = Math.max(maxId, tweet.getId());				
