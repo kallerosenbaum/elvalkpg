@@ -5,7 +5,4 @@ if [ "$#" != "1" ] ; then
   exit 1
 fi
 
-bindaddr=192.168.111.206
-
-java -cp target/classes:target/dependency/* -Djgroups.bind_addr=$bindaddr se.elva.lkpg.twitterdemo.TwitterDataSource $@
-#-Djgroups.bind_addr=$bindaddr se.elva.lkpg.twitterdemo.TwitterDataSource $@
+java -cp target/classes:target/dependency/* se.elva.lkpg.twitterdemo.TwitterDataSource $@
