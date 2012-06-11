@@ -55,7 +55,7 @@ public class LuceneStuff {
 		IndexWriterConfig writerConfig = new IndexWriterConfig(VERSION, analyzer);
 		IndexWriter iw = new IndexWriter(directory, writerConfig);
 		try {
-			Document doc = new Document();
+			Document doc = new Document();			
 			doc.add(new Field(ID, Long.toString(tweet.getId()), Store.YES, Index.ANALYZED));
 			doc.add(new Field(TEXT, tweet.getText(), Store.NO, Index.ANALYZED));
 			iw.addDocument(doc);
@@ -80,6 +80,7 @@ public class LuceneStuff {
 			List<Long> list = new ArrayList<Long>();
 			for (ScoreDoc sd : scoreDocs) {
 				Document doc = searcher.doc(sd.doc);
+				Printer.p("ID: " + doc.get(ID));
 				list.add(Long.parseLong(doc.get(ID)));
 			}
 			return list;

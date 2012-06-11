@@ -1,0 +1,52 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>twitterfeed</artifactId>
+	<packaging>ejb</packaging>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>se.elva.lkpg</groupId>
+			<artifactId>common</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.twitter4j</groupId>
+			<artifactId>twitter4j-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-ejb-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+					<ejbVersion>3.1</ejbVersion>
+					<archive>
+						<manifestEntries>
+							<!-- <Dependencies>org.infinispan org.apache.log4j deployment.ear-1.0-SNAPSHOT.ear.common-1.0-SNAPSHOT.jar</Dependencies> -->
+							<Dependencies>org.infinispan org.apache.log4j</Dependencies>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<parent>
+		<groupId>se.elva.lkpg</groupId>
+		<artifactId>twitterdemo</artifactId>
+		<version>1.0-SNAPSHOT</version>
+		<relativePath>../</relativePath>
+	</parent>
+</project>
