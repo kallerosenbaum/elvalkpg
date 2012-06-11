@@ -19,7 +19,7 @@ import twitter4j.Tweet;
 
 @Stateless
 public class CacheCreator {
-	@Resource(lookup = "java:/TwitterDemoCacheContainer")
+	@Resource(lookup = "java:TwitterDemoCacheContainer")
 	private EmbeddedCacheManager manager;
 	
 	private static final Logger logger = Logger.getLogger(CacheCreator.class);
