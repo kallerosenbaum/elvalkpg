@@ -3,6 +3,7 @@ package se.elva.lkpg.common;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
+import javax.transaction.TransactionManager;
 
 import org.apache.log4j.Logger;
 import org.infinispan.Cache;
@@ -10,6 +11,9 @@ import org.infinispan.configuration.cache.CacheMode;
 import org.infinispan.configuration.cache.Configuration;
 import org.infinispan.configuration.cache.ConfigurationBuilder;
 import org.infinispan.manager.EmbeddedCacheManager;
+import org.infinispan.transaction.LockingMode;
+import org.infinispan.transaction.lookup.JBossTransactionManagerLookup;
+import org.infinispan.transaction.lookup.TransactionManagerLookup;
 
 import twitter4j.Tweet;
 
@@ -36,9 +40,13 @@ public class CacheCreator {
 		Configuration config = configBuilder.build();
 		
 		manager.defineConfiguration(TWEET_CACHE, config);
-		manager.defineConfiguration(INDEX_CACHE, config);
-		manager.defineConfiguration(TIMER_CACHE, config);
 		manager.defineConfiguration(TWEET_MAXID_CACHE, config);
+
+		configBuilder.transaction().lockingMode(LockingMode.PESSIMISTIC);
+		TransactionManagerLookup lookup = new JBossTransactionManagerLookup();
+		configBuilder.transaction().transactionManagerLookup(lookup);
+		manager.defineConfiguration(TIMER_CACHE, configBuilder.build());
+        manager.defineConfiguration(INDEX_CACHE, configBuilder.build());
 	}
 
 	public Cache<Long, Tweet> getTweetCache() {

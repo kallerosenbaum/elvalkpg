@@ -38,8 +38,10 @@ public class TwitterFeed {
 	@Schedule(hour = "*", minute = "*", second = "*/10", persistent = false)
 	public void testSchedule() {
 		log.info("testSchedule() called");
+		
 		Cache<String, String> timestampCache = cacheCreator.getTimestampCache();
 		// Check if global time has come!
+		
 		String started = timestampCache.put(LOCK, "started");
 		String startedTimeString = timestampCache.get(STARTED_TIME);
 		Long startedTime = startedTimeString == null ? null : Long
