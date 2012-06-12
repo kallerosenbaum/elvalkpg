@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>se.elva.lkpg</groupId>
-	<artifactId>twitterdemo</artifactId>
+	<groupId>se.elva.lkpg.twitterdemo</groupId>
+	<artifactId>parent</artifactId>
 	<packaging>pom</packaging>
 	<version>1.0-SNAPSHOT</version>
 	<name>TwitterDemo</name>
@@ -52,7 +52,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.twitter4j</groupId>
-			<artifactId>twitter4j-core</artifactId>			
+			<artifactId>twitter4j-core</artifactId>
 		</dependency>
 	</dependencies>
 
@@ -64,13 +64,8 @@
 				<version>2.5</version>
 				<configuration>
 					<compilerVersion>1.6</compilerVersion>
-				    <target>1.6</target>
-				    <source>1.6</source>
-					<!-- javaee6 contains upgrades of APIs contained within the JDK itself. 
-						As such these need to be placed on the bootclasspath, rather than classpath 
-						of the compiler. If you don't make use of these new updated API, you can 
-						delete the profile. On non-SUN jdk, you will need to create a similar profile 
-						for your jdk, with the similar property as sun.boot.class.path in Sun's JDK. -->
+					<target>1.6</target>
+					<source>1.6</source>
 					<compilerArguments>
 						<bootclasspath>${settings.localRepository}/javax/javaee-endorsed-api/6.0/javaee-endorsed-api-6.0.jar${path.separator}${sun.boot.class.path}</bootclasspath>
 					</compilerArguments>
@@ -83,13 +78,14 @@
 					</dependency>
 				</dependencies>
 			</plugin>
-			
+
 		</plugins>
 	</build>
 	<modules>
 		<module>twitterfeed</module>
 		<module>common</module>
 		<module>ear</module>
+		<module>web</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>
@@ -114,26 +110,31 @@
 				<groupId>org.hornetq</groupId>
 				<artifactId>hornetq-core</artifactId>
 				<version>2.2.18.Final</version>
+				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.hornetq</groupId>
 				<artifactId>hornetq-core-client</artifactId>
 				<version>2.2.18.Final</version>
+				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.jboss.netty</groupId>
 				<artifactId>netty</artifactId>
 				<version>3.2.7.Final</version>
+				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.drools</groupId>
 				<artifactId>drools-core</artifactId>
 				<version>5.4.0.Final</version>
+				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.drools</groupId>
 				<artifactId>drools-compiler</artifactId>
 				<version>5.4.0.Final</version>
+				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>com.thoughtworks.xstream</groupId>
@@ -154,4 +155,4 @@
 		</dependencies>
 	</dependencyManagement>
 </project>
-<!--hej-->
+<!--hej -->

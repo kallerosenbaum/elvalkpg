@@ -1,6 +1,5 @@
 package se.elva.lkpg.twitterdemo;
 
-import org.hornetq.api.core.HornetQException;
 import org.hornetq.api.core.TransportConfiguration;
 import org.hornetq.api.core.client.ClientMessage;
 import org.hornetq.api.core.client.ClientProducer;

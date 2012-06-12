@@ -1,17 +1,15 @@
-package se.elva.lkpg.twitterfeed;
+package se.elva.lkpg.twitterdemo.feed;
 
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
 
 import org.apache.log4j.Logger;
 import org.infinispan.Cache;
 
-import se.elva.lkpg.common.CacheCreator;
+import se.elva.lkpg.twitterdemo.common.CacheCreator;
 import twitter4j.Query;
 import twitter4j.QueryResult;
 import twitter4j.Tweet;

@@ -3,8 +3,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<artifactId>twitterdemo</artifactId>
-		<groupId>se.elva.lkpg</groupId>
+		<artifactId>parent</artifactId>
+		<groupId>se.elva.lkpg.twitterdemo</groupId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
@@ -37,13 +37,17 @@
 					<defaultLibBundleDir>lib</defaultLibBundleDir>
 					<modules>
 						<ejbModule>
-							<groupId>se.elva.lkpg</groupId>
+							<groupId>se.elva.lkpg.twitterdemo</groupId>
 							<artifactId>twitterfeed</artifactId>
 						</ejbModule>
 						<ejbModule>
-							<groupId>se.elva.lkpg</groupId>
+							<groupId>se.elva.lkpg.twitterdemo</groupId>
 							<artifactId>common</artifactId>
 						</ejbModule>
+						<webModule>
+							<groupId>se.elva.lkpg.twitterdemo</groupId>
+							<artifactId>web</artifactId>
+						</webModule>
 					</modules>
 				</configuration>
 			</plugin>
@@ -65,16 +69,22 @@
 	</build>
 	<dependencies>
 		<dependency>
-			<groupId>se.elva.lkpg</groupId>
+			<groupId>se.elva.lkpg.twitterdemo</groupId>
 			<artifactId>twitterfeed</artifactId>
 			<version>1.0-SNAPSHOT</version>
 			<type>ejb</type>
 		</dependency>
 		<dependency>
-			<groupId>se.elva.lkpg</groupId>
+			<groupId>se.elva.lkpg.twitterdemo</groupId>
 			<artifactId>common</artifactId>
 			<version>1.0-SNAPSHOT</version>
 			<type>ejb</type>
+		</dependency>
+		<dependency>
+			<groupId>se.elva.lkpg.twitterdemo</groupId>
+			<artifactId>web</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<type>war</type>
 		</dependency>
 	</dependencies>
 </project>

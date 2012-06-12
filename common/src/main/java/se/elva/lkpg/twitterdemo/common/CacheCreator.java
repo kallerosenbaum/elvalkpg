@@ -1,9 +1,8 @@
-package se.elva.lkpg.common;
+package se.elva.lkpg.twitterdemo.common;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
-import javax.transaction.TransactionManager;
 
 import org.apache.log4j.Logger;
 import org.infinispan.Cache;
