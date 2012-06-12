@@ -3,6 +3,10 @@ package se.elva.lkpg.twitterfeed;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 
 import org.apache.log4j.Logger;
 import org.infinispan.Cache;
@@ -19,7 +23,7 @@ import twitter4j.TwitterFactory;
 public class TwitterFeed {
 	Logger log = Logger.getLogger(TwitterFeed.class);
 
-	private static final long INTERVAL = 90000;
+	private static final long INTERVAL = 30000;
 	private static final long ACCEPTABLE_RUNTIME = 3 * INTERVAL;
 	private static final String LOCK = "twitterFeedLock";
 	private static final String STARTED_TIME = "twitterFeedStartedTime";
@@ -36,6 +40,7 @@ public class TwitterFeed {
 	// private Cache<String, String> timestampCache;
 
 	@Schedule(hour = "*", minute = "*", second = "*/10", persistent = false)
+	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 	public void testSchedule() {
 		log.info("testSchedule() called");
 		
@@ -72,6 +77,10 @@ public class TwitterFeed {
 		} finally {
 			log.debug("Remove lock");
 			timestampCache.remove(LOCK);
+		}
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
 		}
 	}
 
