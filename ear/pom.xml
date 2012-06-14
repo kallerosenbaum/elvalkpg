@@ -55,6 +55,13 @@
 				<groupId>org.jboss.as.plugins</groupId>
 				<artifactId>jboss-as-maven-plugin</artifactId>
 				<version>7.1.1.Final</version>
+				<configuration>
+					<domain>
+						<server-groups>
+							<server-group>twitterdemo-group</server-group>
+						</server-groups>
+					</domain>
+				</configuration>
 				<executions>
 					<execution>
 						<phase>install</phase>
@@ -64,7 +71,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
 		</plugins>
 	</build>
 	<dependencies>

@@ -41,11 +41,21 @@ public class CacheCreator {
 		manager.defineConfiguration(TWEET_CACHE, config);
 		manager.defineConfiguration(TWEET_MAXID_CACHE, config);
 
-		configBuilder.transaction().lockingMode(LockingMode.PESSIMISTIC);
+		configBuilder = new ConfigurationBuilder();
+		configBuilder.clustering().cacheMode(CacheMode.DIST_ASYNC).hash()
+				.numOwners(2).groups();
+		configBuilder.invocationBatching().enable();
+        manager.defineConfiguration(INDEX_CACHE, configBuilder.build());
+		
+
+		configBuilder = new ConfigurationBuilder();
+		configBuilder.clustering().cacheMode(CacheMode.DIST_SYNC).hash()
+				.numOwners(2).groups();
+		configBuilder.invocationBatching().enable();
+        configBuilder.transaction().lockingMode(LockingMode.PESSIMISTIC);
 		TransactionManagerLookup lookup = new JBossTransactionManagerLookup();
 		configBuilder.transaction().transactionManagerLookup(lookup);
 		manager.defineConfiguration(TIMER_CACHE, configBuilder.build());
-        manager.defineConfiguration(INDEX_CACHE, configBuilder.build());
 	}
 
 	public Cache<Long, Tweet> getTweetCache() {

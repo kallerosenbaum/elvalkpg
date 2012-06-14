@@ -19,6 +19,15 @@
 			<groupId>org.twitter4j</groupId>
 			<artifactId>twitter4j-core</artifactId>
 		</dependency>
+				<dependency>
+			<groupId>org.infinispan</groupId>
+			<artifactId>infinispan-lucene-directory</artifactId>
+		</dependency>
+
+				<dependency>
+					<groupId>org.apache.lucene</groupId>
+					<artifactId>lucene-core</artifactId>
+				</dependency>
 	</dependencies>
 
 	<build>

@@ -8,18 +8,8 @@
 	<name>TwitterDemo</name>
 	<dependencies>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.infinispan</groupId>
 			<artifactId>infinispan-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.infinispan</groupId>
-			<artifactId>infinispan-lucene-directory</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.hornetq</groupId>
@@ -53,6 +43,10 @@
 		<dependency>
 			<groupId>org.twitter4j</groupId>
 			<artifactId>twitter4j-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
 		</dependency>
 	</dependencies>
 
@@ -104,7 +98,6 @@
 				<groupId>org.infinispan</groupId>
 				<artifactId>infinispan-lucene-directory</artifactId>
 				<version>5.1.0.FINAL</version>
-				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.hornetq</groupId>
@@ -152,7 +145,16 @@
 				<version>1.2.14</version>
 				<scope>provided</scope>
 			</dependency>
+			<dependency>
+				<groupId>se.elva.lkpg.twitterdemo</groupId>
+				<artifactId>common</artifactId>
+				<version>1.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.lucene</groupId>
+				<artifactId>lucene-core</artifactId>
+				<version>3.5.0</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 </project>
-<!--hej -->
