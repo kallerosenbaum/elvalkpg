@@ -1,0 +1,114 @@
+"twitterdemo" => {
+            "aliases" => undefined,
+            "default-cache" => "dummy",
+            "eviction-executor" => undefined,
+            "invalidation-cache" => undefined,
+            "jndi-name" => "java:/TwitterDemoCacheContainer",
+            "listener-executor" => undefined,
+            "local-cache" => undefined,
+            "module" => undefined,
+            "replicated-cache" => undefined,
+            "replication-queue-executor" => undefined,
+            "start" => "EAGER",
+            "distributed-cache" => {"dummy" => {
+                "async-marshalling" => undefined,
+                "batching" => true,
+                "binary-keyed-jdbc-store" => undefined,
+                "eviction" => undefined,
+                "expiration" => undefined,
+                "file-store" => undefined,
+                "indexing" => undefined,
+                "jndi-name" => undefined,
+                "l1-lifespan" => undefined,
+                "locking" => undefined,
+                "mixed-keyed-jdbc-store" => undefined,
+                "mode" => "ASYNC",
+                "module" => undefined,
+                "owners" => undefined,
+                "queue-flush-interval" => undefined,
+                "queue-size" => undefined,
+                "remote-store" => undefined,
+                "remote-timeout" => undefined,
+                "start" => undefined,
+                "state-transfer" => undefined,
+                "store" => undefined,
+                "string-keyed-jdbc-store" => undefined,
+                "transaction" => undefined,
+                "virtual-nodes" => undefined
+            }},
+            "transport" => {"TRANSPORT" => {
+                "cluster" => undefined,
+                "executor" => undefined,
+                "lock-timeout" => 240000,
+                "machine" => undefined,
+                "rack" => undefined,
+                "site" => undefined,
+                "stack" => "udp"
+            }}
+        }
+                <cache-container name="twitterdemo" default-cache="dummy" jndi-name="java:/TwitterDemoCacheContainer" start="EAGER">
+                    <transport stack="udp"/>
+                    <distributed-cache name="dummy" mode="ASYNC" batching="true"/>
+                </cache-container>
+
+        <server name="twitterdemo1" group="twitterdemo-group" auto-start="true">
+            <jvm name="twitterdemo1" debug-enabled="false">
+                <heap size="1024m" max-size="1024m"/>
+                <permgen/>
+            </jvm>
+            <socket-bindings socket-binding-group="full-ha-sockets"/>
+        </server>
+        <server name="twitterdemo2" group="twitterdemo-group" auto-start="true">
+            <jvm name="twitterdemo1" debug-enabled="false">
+                <heap size="1024m" max-size="1024m"/>
+                <permgen/>
+            </jvm>
+            <socket-bindings socket-binding-group="full-ha-sockets" port-offset="100"/>
+        </server>
+
+
+"twitterdemo2" => {
+            "default-cache" => "dummy",
+            "jndi-name" => "java:/TwitterDemoCacheContainer2",
+            "start" => "EAGER",
+            "distributed-cache" => {"dummy" => {
+                "batching" => true,
+                "mode" => "ASYNC",
+            }},
+            "transport" => {"TRANSPORT" => {
+                "lock-timeout" => 60000,
+                "stack" => "udp"
+            }}
+        }
+
+
+:stop-servers()
+/host=master/server-config=server-one:write-attribute(name=auto-start,value=false)
+/host=master/server-config=server-two:write-attribute(name=auto-start,value=false)
+
+batch
+/profile=full-ha/subsystem=infinispan/cache-container=twitterdemo:add
+/profile=full-ha/subsystem=infinispan/cache-container=twitterdemo:write-attribute(name=jndi-name,value=java:/TwitterDemoCacheContainer)
+/profile=full-ha/subsystem=infinispan/cache-container=twitterdemo:write-attribute(name=default-cache,value=dummy)
+/profile=full-ha/subsystem=infinispan/cache-container=twitterdemo/transport=TRANSPORT/:add
+/profile=full-ha/subsystem=infinispan/cache-container=twitterdemo/transport=TRANSPORT/:write-attribute(name=stack,value=udp)
+/profile=full-ha/subsystem=infinispan/cache-container=twitterdemo/transport=TRANSPORT/:write-attribute(name=lock-timeout,value=60000)
+cd /profile=full-ha/subsystem=infinispan/cache-container=twitterdemo
+./distributed-cache=tweet-cache:add(batching=true,mode=sync,owners=2)
+./distributed-cache=tweet-maxid-cache:add(batching=true,mode=sync,owners=2)
+./distributed-cache=index-cache:add(batching=true,mode=async,owners=2)
+./distributed-cache=timer-cache:add(batching=true,mode=sync,owners=2)
+run-batch
+
+batch
+/server-group=twitterdemo-group:add(profile=full-ha,socket-binding-group=full-ha-sockets)
+﻿﻿/host=master/server-config=twitterdemo1:add(group=twitterdemo-group,auto-start=true,socket-binding-port-offset=0)
+﻿﻿/host=master/server-config=twitterdemo2:add(group=twitterdemo-group,auto-start=true,socket-binding-port-offset=100)
+﻿﻿/host=master/server-config=twitterdemo3:add(group=twitterdemo-group,auto-start=true,socket-binding-port-offset=200)
+/host=master/server-config=twitterdemo4:add(group=twitterdemo-group,auto-start=true,socket-binding-port-offset=300)
+run-batch
+
+/host=master/server-config=twitterdemo1:start
+/host=master/server-config=twitterdemo2:start
+
+
