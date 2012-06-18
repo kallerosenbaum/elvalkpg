@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<ui:composition template="template.xhtml">
+	<ui:define name="content">
+
+		<h1>Tweets</h1>
+		<div>
+			<p>Some interesting text...</p>
+		</div>
+
+		<h:form id="subjectForm">
+			<h2>Subjects</h2>
+			<p>
+				Current subjects are:
+				<h:outputText value="#{subjectController.subjects}"
+					rendered="#{not empty subjectController.subjects}" />
+			</p>
+			<h:panelGrid columns="3">
+				<h:outputLabel for="newSubject">Enter what subject to add:</h:outputLabel>
+				<h:inputText id="newSubject" value="#{subjectController.newSubject}" />
+				<h:message for="newSubject" />
+			</h:panelGrid>
+			<h:commandButton id="submitSubject" value="add subject"
+				action="#{subjectController.addSubject}" />
+			<h:commandButton id="clearSubjects" value="clear subjects"
+				action="#{subjectController.clearSubjects}" />
+		</h:form>
+
+		<br />
+
+		<h:messages />
+		<h:form id="searchForm">
+			<h2>Search</h2>
+			<h:panelGrid columns="3">
+				<h:outputLabel for="searchFor">Enter what to search for:</h:outputLabel>
+				<h:inputText id="searchFor" value="#{searchController.searchFor}" />
+				<h:message for="searchFor" />
+			</h:panelGrid>
+			<h:commandButton id="search" value="Search now!"
+				action="#{searchController.greet}" />
+		</h:form>
+
+		<br />
+		<h3>
+			<h:outputText value="#{searchController.greeting}"
+				rendered="#{not empty searchController.greeting}" />
+		</h3>
+		<br />
+
+		<h:dataTable value="#{searchController.tweets}" var="tweet"
+			rendered="#{not empty searchController.tweets}">
+			<h:column>
+				<!-- column header -->
+				<f:facet name="header">Tweet id</f:facet>
+				<!-- row record -->
+    				#{tweet.id}
+    			</h:column>
+
+			<h:column>
+				<f:facet name="header">From user</f:facet>
+    				#{tweet.fromUser}
+    			</h:column>
+
+			<h:column>
+				<f:facet name="header">Message</f:facet>
+    				#{tweet.text}
+    			</h:column>
+		</h:dataTable>
+
+		<h:outputText value="No tweets found. Sorry!"
+			rendered="#{empty searchController.tweets and not empty searchController.searchFor}" />
+
+	</ui:define>
+</ui:composition>
+</html>
