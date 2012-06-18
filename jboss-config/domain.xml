@@ -64,8 +64,11 @@
                 <logger category="jacorb.config">
                     <level name="ERROR"/>
                 </logger>
+                <logger category="se.elva">
+                    <level name="DEBUG"/>
+                </logger>
                 <root-logger>
-                    <level name="INFO"/>
+                    <level name="DEBUG"/>
                     <handlers>
                         <handler name="FILE"/>
                     </handlers>
@@ -1000,7 +1003,7 @@
                     <distributed-cache name="tweet-maxid-cache" owners="2" mode="SYNC" batching="true"/>
                     <distributed-cache name="index-cache" owners="2" mode="ASYNC" batching="true"/>
                     <distributed-cache name="timer-cache" owners="2" mode="SYNC" batching="true">
-                        <transaction locking="PESSIMISTIC"/>
+                        <transaction mode="NON_DURABLE_XA" locking="PESSIMISTIC"/>
                     </distributed-cache>
                 </cache-container>
             </subsystem>
