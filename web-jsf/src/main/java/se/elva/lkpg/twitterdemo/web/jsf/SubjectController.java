@@ -14,7 +14,6 @@ import se.elva.lkpg.twitterdemo.common.CacheKeys;
 @RequestScoped
 public class SubjectController {
 
-	@Inject
 	private CacheCreator cacheCreator;
 
 	private String newSubject;
@@ -24,6 +23,14 @@ public class SubjectController {
 	private String subjects;
 
 	private Cache<String, String> cache;
+
+	public SubjectController() {
+	}
+
+	@Inject
+	SubjectController(CacheCreator cacheCreator) {
+		this.cacheCreator = cacheCreator;
+	}
 
 	@PostConstruct
 	public void postConstruct() {
