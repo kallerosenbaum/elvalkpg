@@ -43,6 +43,15 @@
 			<h:commandButton id="search" value="Search now!"
 				action="#{searchController.greet}" />
 		</h:form>
+		<br/>
+		
+		<h:form id="countTweetsForm">
+			<h2>Count all tweets</h2>
+			<h:commandButton id="countTweets" value="Count all" 
+			    action="#{searchController.countTweets}" />			
+		</h:form> 
+		<h:outputText value="#{searchController.tweetCount}"
+		        rendered="#{searchController.tweetCount != -1}" />
 
 		<br />
 		<h3>
