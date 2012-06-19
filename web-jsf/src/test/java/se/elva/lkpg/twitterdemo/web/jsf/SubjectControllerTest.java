@@ -2,10 +2,12 @@ package se.elva.lkpg.twitterdemo.web.jsf;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.infinispan.Cache;
-import org.junit.Ignore;
+import org.junit.Before;
 import org.junit.Test;
 
 import se.elva.lkpg.twitterdemo.common.CacheCreator;
@@ -13,44 +15,77 @@ import se.elva.lkpg.twitterdemo.common.CacheKeys;
 
 public class SubjectControllerTest {
 
-	@Test
-	public void shouldGetSubjectsFromDB() throws Exception {
-		CacheCreator cacheCreator = mock(CacheCreator.class);
-		SubjectController subjectController = new SubjectController(cacheCreator);
+	private CacheCreator cacheCreator;
+	private Cache<String, String> cache;
 
-		@SuppressWarnings("unchecked")
-		Cache<String, String> cache = mock(Cache.class);
+	@SuppressWarnings("unchecked")
+	@Before
+	public void setUp() {
+		cacheCreator = mock(CacheCreator.class);
+		cache = mock(Cache.class);
 		when(cacheCreator.getTweetMaxIdCache()).thenReturn(cache);
-		when(cache.get(CacheKeys.TWITTER_SUBJECTS)).thenReturn("ruby");
-
-		subjectController.postConstruct();
-		subjectController.setNewSubject("java");
-		subjectController.addSubject();
-		assertEquals(
-				"Adding subject \"java\"! Now following subjects are followed: ruby,java",
-				subjectController.getResponse());
 	}
 
-	@Ignore
+	@Test
+	public void shouldGetSubjectsFromDB() throws Exception {
+		when(cache.get(CacheKeys.TWITTER_SUBJECTS)).thenReturn("ruby");
+
+		SubjectController subjectController = createSubjectController(cacheCreator);
+		subjectController.setNewSubject("java");
+		subjectController.addSubject();
+		assertEquals("ruby,java", subjectController.getSubjects());
+	}
+
 	@Test
 	public void shouldStoreSubjectsInDB() throws Exception {
-		CacheCreator cacheCreator = mock(CacheCreator.class);
-		SubjectController subjectController = new SubjectController(cacheCreator);
+		when(cache.get(CacheKeys.TWITTER_SUBJECTS)).thenReturn("", "", "java");
 
-		@SuppressWarnings("unchecked")
-		Cache<String, String> cache = mock(Cache.class);
-		when(cacheCreator.getTweetMaxIdCache()).thenReturn(cache);
-		String subjects = "";
-		when(cache.get(CacheKeys.TWITTER_SUBJECTS)).thenReturn(subjects);
-		// when(cache.put(any(String.class))).then;
-
-		subjectController.postConstruct();
+		SubjectController subjectController = createSubjectController(cacheCreator);
 		subjectController.setNewSubject("java");
 		subjectController.addSubject();
 		subjectController.setNewSubject("python");
+		subjectController.addSubject();
 
-		assertEquals(
-				"Adding subject \"java\"! Now following subjects are followed: java,python",
-				subjectController.getResponse());
+		verify(cache).put(CacheKeys.TWITTER_SUBJECTS, "java");
+		verify(cache).put(CacheKeys.TWITTER_SUBJECTS, "java,python");
+	}
+
+	@Test
+	public void shouldNotStoreTheSameSubjectTwice() throws Exception {
+		when(cache.get(CacheKeys.TWITTER_SUBJECTS)).thenReturn("java");
+
+		SubjectController subjectController = createSubjectController(cacheCreator);
+		subjectController.setNewSubject("java");
+		subjectController.addSubject();
+
+		assertEquals("java", subjectController.getSubjects());
+	}
+
+	@Test
+	public void shouldNotAddNullSubject() throws Exception {
+		when(cache.get(CacheKeys.TWITTER_SUBJECTS)).thenReturn("");
+
+		SubjectController subjectController = createSubjectController(cacheCreator);
+		subjectController.setNewSubject(null);
+		subjectController.addSubject();
+
+		verify(cache, times(0)).put(CacheKeys.TWITTER_SUBJECTS, null);
+	}
+
+	@Test
+	public void shouldNotAddEmptySubject() throws Exception {
+		when(cache.get(CacheKeys.TWITTER_SUBJECTS)).thenReturn("");
+
+		SubjectController subjectController = createSubjectController(cacheCreator);
+		subjectController.setNewSubject("");
+		subjectController.addSubject();
+
+		verify(cache, times(0)).put(CacheKeys.TWITTER_SUBJECTS, "");
+	}
+
+	private SubjectController createSubjectController(CacheCreator cacheCreator) {
+		SubjectController subjectController = new SubjectController(cacheCreator);
+		subjectController.postConstruct();
+		return subjectController;
 	}
 }

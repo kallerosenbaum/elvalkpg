@@ -18,8 +18,6 @@ public class SubjectController {
 
 	private String newSubject;
 
-	private String response;
-
 	private String subjects;
 
 	private Cache<String, String> cache;
@@ -33,7 +31,7 @@ public class SubjectController {
 	}
 
 	@PostConstruct
-	public void postConstruct() {
+	void postConstruct() {
 		cache = cacheCreator.getTweetMaxIdCache();
 		addSubjectToDB();
 	}
@@ -41,45 +39,43 @@ public class SubjectController {
 	public void addSubject() {
 		if (subjectIsEntered()) {
 			addSubjectToDB();
-			response = "Adding subject \"" + newSubject
-					+ "\"! Now following subjects are followed: " + subjects;
 			newSubject = "";
-		} else {
-			response = "Please add subject!";
 		}
 	}
 
 	private void addSubjectToDB() {
-		subjects = getSubjects();
-		if (subjects == null) {
-			subjects = "";
+		subjects = getSubjectsFromDb();
+		if (subjectAlreadyExists()) {
+			return;
 		}
 
-		// if (subjectAlreadyExists()) {
-		// return;
-		// }
-
-		if (newSubject != null && !"".equals(newSubject)) {
-			if (!"".equals(subjects)) {
-				subjects += ",";
-			}
-			subjects += newSubject;
+		if (!subjects.isEmpty()) {
+			subjects += ",";
 		}
+		subjects += newSubject;
 		cache.put(CacheKeys.TWITTER_SUBJECTS, subjects);
 	}
 
 	private boolean subjectAlreadyExists() {
 		String[] subjectArray = subjects.split(",");
 		for (String subject : subjectArray) {
-			if (newSubject.equals(subject)) {
+			if (subject.equals(newSubject)) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	private String getSubjects() {
-		return cache.get(CacheKeys.TWITTER_SUBJECTS);
+	String getSubjects() {
+		return subjects;
+	}
+
+	private String getSubjectsFromDb() {
+		String subjectsFromDb = cache.get(CacheKeys.TWITTER_SUBJECTS);
+		if (subjectsFromDb != null) {
+			return subjectsFromDb;
+		}
+		return "";
 	}
 
 	public void clearSubjects() {
@@ -96,10 +92,6 @@ public class SubjectController {
 
 	public void setNewSubject(String newSubject) {
 		this.newSubject = newSubject;
-	}
-
-	public String getResponse() {
-		return response;
 	}
 
 }
