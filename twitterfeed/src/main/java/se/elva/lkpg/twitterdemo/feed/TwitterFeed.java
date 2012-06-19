@@ -8,8 +8,6 @@ import java.util.StringTokenizer;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 
 import org.apache.log4j.Logger;
 import org.infinispan.Cache;
@@ -17,7 +15,6 @@ import org.infinispan.Cache;
 import se.elva.lkpg.twitterdemo.common.CacheCreator;
 import se.elva.lkpg.twitterdemo.common.CacheKeys;
 import twitter4j.Query;
-import twitter4j.QueryResult;
 import twitter4j.Tweet;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -38,13 +35,12 @@ public class TwitterFeed {
 	private Indexer indexer;
 	
 	@Schedule(hour = "*", minute = "*", second = "*/10", persistent = false)
-	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+	//@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 	public void testSchedule() {
 		log.info("testSchedule() called");
 
 		Cache<String, String> timestampCache = cacheCreator.getTimestampCache();
-		// Check if global time has come!
-
+		
 		String started = timestampCache.put(CacheKeys.LOCK, "started");
 		String startedTimeString = timestampCache.get(CacheKeys.STARTED_TIME);
 		Long startedTime = startedTimeString == null ? null : Long
