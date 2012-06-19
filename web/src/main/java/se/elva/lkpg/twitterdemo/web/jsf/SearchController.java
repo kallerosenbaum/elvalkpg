@@ -27,6 +27,8 @@ public class SearchController {
 
 	private final List<Tweet> tweets = new ArrayList<Tweet>();
 
+	private int tweetCount = -1;
+	
 	public SearchController() {
 	}
 
@@ -45,6 +47,10 @@ public class SearchController {
 		} else {
 			greeting = "";
 		}
+	}
+	
+	public void countTweets() {
+		tweetCount = luceneStuff.listAllDocuments().size();
 	}
 
 	private void populateTweets(List<Long> tweetIds) {
@@ -76,6 +82,10 @@ public class SearchController {
 
 	public List<Tweet> getTweets() {
 		return tweets;
+	}
+	
+	public int getTweetCount() {
+		return tweetCount;
 	}
 
 }
