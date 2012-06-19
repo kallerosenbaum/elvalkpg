@@ -17,10 +17,8 @@ import twitter4j.Tweet;
 @RequestScoped
 public class SearchController {
 
-	@Inject
 	private LuceneStuff luceneStuff;
 
-	@Inject
 	private CacheCreator cacheCreator;
 
 	private String searchFor;
@@ -28,6 +26,15 @@ public class SearchController {
 	private String greeting;
 
 	private final List<Tweet> tweets = new ArrayList<Tweet>();
+
+	public SearchController() {
+	}
+
+	@Inject
+	public SearchController(LuceneStuff luceneStuff, CacheCreator cacheCreator) {
+		this.luceneStuff = luceneStuff;
+		this.cacheCreator = cacheCreator;
+	}
 
 	public void greet() {
 		if (searchIsEntered()) {
