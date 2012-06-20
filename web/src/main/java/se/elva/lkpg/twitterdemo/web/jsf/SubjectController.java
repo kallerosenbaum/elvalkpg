@@ -33,7 +33,7 @@ public class SubjectController {
 	@PostConstruct
 	void postConstruct() {
 		cache = cacheCreator.getTweetMaxIdCache();
-		addSubjectToDB();
+		subjects = getSubjectsFromDb();
 	}
 
 	public void addSubject() {
